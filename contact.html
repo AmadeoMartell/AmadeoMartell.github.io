@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neva Trans Company - Contact</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<header class="header-container">
+    <div class="header-left">
+        <img id="logo" src="media/aitu-logo.png" alt="logo" style="height: 60px;">
+        <h1>Neva Trans Company</h1>
+    </div>
+
+    <nav>
+        <a class="nav-link" href="index.html">About Us</a>
+        <a class="nav-link" href="pricing.html">Pricing</a>
+        <a class="nav-link" href="FAQ.html">FAQ</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" id="theme-toggle">&#128262; / &#127765;</a>
+    </nav>
+</header>
+
+<div id="popupForm" class="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <h3>Login</h3>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<main class="main-content">
+    <h2>Submitted Contacts</h2>
+    <button id="openLoginPopup">Login to View Contacts</button>
+    <div id="contacts-section" style="display: none;">
+        <button id="logout">Logout</button>
+        <table id="contacts-table" border="1" style="width:100%; border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th>Name <button id="sort-name">⇅</button></th>
+                <th>Phone <button id="sort-phone">⇅</button></th>
+                <th>Email <button id="sort-email">⇅</button></th>
+                <th>Preferred Time <button id="sort-time">⇅</button></th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+        <p>For more information about our services, please contact us at:</p>
+        <ul>
+            <li>Email: <a href="mailto:nevatrans@astanait.edu.kz" class="footer-links">nevatrans@astanait.edu.kz</a></li>
+            <li>Phone: +7-777-666-1488</li>
+            <li>Address: Maniglik El 11/2</li>
+        </ul>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section footer-company">
+            <p>© 2024 Neva Trans Company. All rights reserved.</p>
+        </div>
+        <div class="footer-section footer-contact">
+            <p>Office: +7-777-666-1488</p>
+            <p>Email: <a href="mailto:nevatrans@astanait.edu.kz">nevatrans@astanait.edu.kz</a></p>
+        </div>
+        <div class="footer-section footer-credits">
+            <p>Created by:</p>
+            <p>Vladislav Goncharov</p>
+            <p>Medeu Ametay</p>
+        </div>
+        <div class="footer-section footer-time">
+            <p id="localTime"></p>
+            <hr>
+            <p id="chineseTime"></p>
+            <p id="ukTime"></p>
+            <p id="usaTime"></p>
+        </div>
+    </div>
+</footer>
+
+<script src="scripts/tableSort.js"></script>
+<script src="scripts/popup_script.js"></script>
+<script src="scripts/auth_popup.js"></script>
+<script src="scripts/themeChange.js"></script>
+<script src="scripts/clock.js"></script>
+</body>
+</html>

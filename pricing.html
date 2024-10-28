@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neva Trans Company</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+    <header class="header-container">
+        <div class="header-left">
+            <img id="logo" src="media/aitu-logo.png" alt="logo" style="height: 60px;">
+            <h1>Neva Trans Company</h1>
+        </div>
+        
+        <nav>
+            <a class="nav-link" href="index.html">About Us</a>
+            <a class="nav-link" href="pricing.html">Pricing</a>
+            <a class="nav-link" href="FAQ.html">FAQ</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-link" id="theme-toggle">&#128262; / &#127765;</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h2>Pricing</h2>
+        <hr>
+        <section>
+            <h3><strong>Price List for Cargo Transportation Services in Kazakhstan</strong></h3>
+            <p>At <strong>Neva Trans Company</strong>, we offer reliable and efficient cargo transportation services across Kazakhstan. Whether you need to move goods locally or long-distance, our team is committed to delivering your cargo safely and on time. Below is a detailed price list for our transportation services based on the type of cargo, distance, and additional requirements.</p>
+        </section>
+        <section>
+            <h3>Standard Cargo Rates</h3>
+            <ul>
+                <li><strong>Local Transportation <i>(within city limits)</i></strong>: Starting from 100 KZT per km.</li>
+                <li><strong>Intercity Transportation <i>(between cities)</i></strong>: Starting from 80 KZT per km for distances up to 500 km. For distances above 500 km, 70 KZT per km.</li>
+                <li><strong>Long-Distance Transportation <i>(cross-country)</i></strong>: Starting from 60 KZT per km for distances exceeding 1,000 km.</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Specialized Cargo Rates</h3>
+            <ul>
+                <li><strong>Fragile Goods <i>(e.g., electronics, glassware)</i></strong>: Additional charge of 10-20% of the base rate per km.</li>
+                <li><strong>Heavy Machinery & Equipment</strong>: Additional charge of 15-25% of the base rate per km, depending on weight and size.</li>
+                <li><strong>Perishable Goods <i>(refrigerated transport)</i></strong>: Additional charge of 20-30% of the base rate per km.</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Additional Services</h3>
+            <ul>
+                <li><strong>Insurance for Goods</strong>: Starting from 0.5% of the total cargo value.</li>
+                <li><strong>Loading and Unloading Assistance</strong>: 1,500-2,000 KZT per hour per worker, depending on the complexity of the cargo.</li>
+                <li><strong>Packaging Services</strong>: Starting from 500 KZT per package or 10,000 KZT for bulk packaging.</li>
+            </ul>
+        </section>
+        <hr>
+        <section>
+            <h3><i>Note:</i></h3>
+            <p>Prices may vary based on the specific requirements of your cargo and distance. For a detailed quote, feel free to <a href="contact.html"> contact us</a> or request a quote through our online form.</p>
+            <p>We are committed to offering competitive pricing while ensuring the highest level of care for your cargo.</p>
+        </section>
+        <hr>
+        <section>
+            <h3>Leave your contact information <button onclick="clearFields()">Clear All</button></h3>
+            <form name="contactForm" method="get">
+                <div>
+                    <label>Enter your Name(in Latin): </label>
+                    <input type="text" name="name" id="name" class="form-input" required>
+                </div>
+                <div>
+                    <label>Enter your Phone number: +7</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" pattern="[0-9]{10}" required>
+                </div>
+                <div>
+                    <label>Enter your Email: </label>
+                    <input type="email" name="email" id="email" class="form-input" required>
+                </div>
+                <div>
+                    <label>Select preferred connection time: </label>
+                    <select name="Select" class="form-select" id="select">
+                        <optgroup label="Morning">
+                            <option>8:00 - 10:00</option>
+                            <option>10:00 - 12:00</option>
+                        </optgroup>
+                        <optgroup label="Mid day">
+                            <option selected>12:00 - 14:00</option>
+                            <option>14:00 - 16:00</option>
+                            <option>16:00 - 18:00</option>
+                        </optgroup>
+                        <optgroup label="Evening">
+                            <option>18:00 - 20:00</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" name="Submit" class="submit-btn" id="submit-btn">
+                </div>
+            </form>
+            <script>
+                function clearFields(){
+                    document.querySelectorAll('input').forEach(input => input.type.localeCompare("submit") !== 0 ? input.value = '' : console.log("submit button skipped"))
+                    document.querySelector('select').selectedIndex = 0;
+                }
+            </script>
+        </section>
+        <hr>
+        <script src="scripts/formValidation.js"></script>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section footer-company">
+                <p>© 2024 Neva Trans Company. All rights reserved.</p>
+            </div>
+            <div class="footer-section footer-contact">
+                <p>Office: +7-777-666-1488</p>
+                <p>Email: <a href="mailto:nevatrans@astanait.edu.kz">nevatrans@astanait.edu.kz</a></p>
+            </div>
+            <div class="footer-section footer-credits">
+                <p>Created by:</p>
+                <p>Vladislav Goncharov</p>
+                <p>Medeu Ametay</p>
+            </div>
+            <div class="footer-section footer-time">
+                <p id="localTime"></p>
+                <hr>
+                <p id="chineseTime"></p>
+                <p id="ukTime"></p>
+                <p id="usaTime"></p>
+            </div>
+        </div>
+    </footer>
+    <script src="scripts/clock.js"></script>
+    <script src="scripts/themeChange.js"></script>
+    <script src="scripts/dataParser.js"></script>
+</body>
+</html>

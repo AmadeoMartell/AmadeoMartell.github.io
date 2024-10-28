@@ -2,41 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <title>Tours</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/jpg" href="icons8-travel-diary-50.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neva Trans Company</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-
-    <div class="header" >
-
-        <div class="nav">
-        
-            <a class="nav-item" href="index.html">Main</a>
-            <a class="nav-item" href="index2.html">News</a>
-            <a class="nav-item" href="index3.html">About us</a>
-            <a class="nav-item" href="index4.html">Contact</a>
-        </div>
-        <div class="title">
-            Have you long dreamed of visiting Switzerland?
+    <header class="header-container">
+        <div class="header-left">
+            <img id="logo" src="media/aitu-logo.png" alt="logo" style="height: 60px;">
+            <h1>Neva Trans Company</h1>
         </div>
 
-        <div class="little-title">
-            We can help make your dream come true!
-        </div>
+        <nav>
+            <a class="nav-link" href="index.html">About Us</a>
+            <a class="nav-link" href="pricing.html">Pricing</a>
+            <a class="nav-link" href="FAQ.html">FAQ</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-link" id="theme-toggle">&#128262; / &#127765;</a>
+        </nav>
+    </header>
 
-        <div class="form">
-            <form action="" method="">
-                <input type="text" class="input" placeholder="Enter your phone number">
-            </form>
+    <main class="main-content">
+        <section>
+            <h2>About Neva Trans Company</h2>
+            <hr>
+            <figure>
+                <img src="http://www.jexpress.co.jp/english/images/pages/kv_Kazakhstan.jpg" alt="worldwide ways" class="featured-image">
+                <figcaption>Major transport routes to Kazakhstan</figcaption>
+            </figure>
+            <p><strong>Welcome to About Neva Trans Company</strong>, a leading transportation and logistics provider in Kazakhstan. Specializing in both domestic and transnational delivery, we are committed to ensuring your goods are transported efficiently and reliably across borders.</p>
+
+            <p>Our expertise covers a wide range of logistics services, including road, rail, and air transport, designed to meet the unique demands of businesses of all sizes. With years of experience and a skilled team, we pride ourselves on offering seamless, end-to-end logistics solutions that connect Kazakhstan to international markets.</p>
+
+            <p>We provide: </p>
+            <ul>
+                <li>International Shipping</li>
+                <li>Freight Forwarding</li>
+                <li>Customs Brokerage</li>
+                <li>Warehousing and Distribution</li>
+            </ul>
+
+            <p>Whether you need to move goods within the country or across borders to destinations in Central Asia, Russia, Europe, or beyond, we are your trusted partner for safe and timely deliveries.</p>
+
+            <blockquote>"Your cargo is in safe hands with us!" — <em>Slogan of the Company.</em></blockquote>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section footer-company">
+                <p>© 2024 Neva Trans Company. All rights reserved.</p>
+            </div>
+            <div class="footer-section footer-contact">
+                <p>Office: +7-777-666-1488</p>
+                <p>Email: <a href="mailto:nevatrans@astanait.edu.kz">nevatrans@astanait.edu.kz</a></p>
+            </div>
+            <div class="footer-section footer-credits">
+                <p>Created by:</p>
+                <p>Vladislav Goncharov</p>
+                <p>Medeu Ametay</p>
+            </div>
+            <div class="footer-section footer-time">
+                <p id="localTime"></p>
+                <hr>
+                <p id="chineseTime"></p>
+                <p id="ukTime"></p>
+                <p id="usaTime"></p>
+            </div>
         </div>
-        <div class="button">
-            <a href="#" class="btn">To request a callback</a>
-        </div>
-    </div>
-    
+    </footer>
+    <script src="scripts/clock.js"></script>
+    <script src="scripts/themeChange.js"></script>
 </body>
 </html>
