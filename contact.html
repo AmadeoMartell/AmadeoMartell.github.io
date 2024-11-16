@@ -22,6 +22,7 @@
     </nav>
 </header>
 
+<!-- Login Popup -->
 <div id="popupForm" class="popup" style="display: none;">
     <div class="popup-content">
         <button class="close-btn" id="closeBtn">&times;</button>
@@ -36,18 +37,36 @@
     </div>
 </div>
 
+<!-- Registration Popup -->
+<div id="registerPopup" class="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn" id="closeRegisterBtn">&times;</button>
+        <h3>Register</h3>
+        <form id="register-form">
+            <label for="reg-username">Username:</label>
+            <input type="text" id="reg-username" required>
+            <label for="reg-password">Password:</label>
+            <input type="password" id="reg-password" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
 <main class="main-content">
     <h2>Submitted Contacts</h2>
-    <button id="openLoginPopup">Login to View Contacts</button>
-    <div id="contacts-section" style="display: none;">
+    <div id="button-container" style="text-align: center;">
+        <button id="openLoginPopup" class="visible">Login to View Contacts</button>
+        <button id="openRegisterPopup" class="visible">Register</button>
+    </div>
+    <div id="contacts-section" class="hidden">
         <button id="logout">Logout</button>
         <table id="contacts-table" border="1" style="width:100%; border-collapse: collapse;">
             <thead>
             <tr>
-                <th>Name <button id="sort-name">⇅</button></th>
-                <th>Phone <button id="sort-phone">⇅</button></th>
-                <th>Email <button id="sort-email">⇅</button></th>
-                <th>Preferred Time <button id="sort-time">⇅</button></th>
+                <th>Name <button class= "sort-button" id="sort-name">⇅</button></th>
+                <th>Phone <button class= "sort-button" id="sort-phone">⇅</button></th>
+                <th>Email <button class= "sort-button" id="sort-email">⇅</button></th>
+                <th>Preferred Time <button class= "sort-button" id="sort-time">⇅</button></th>
             </tr>
             </thead>
             <tbody></tbody>
@@ -88,10 +107,10 @@
     </div>
 </footer>
 
-<script src="scripts/tableSort.js"></script>
 <script src="scripts/popup_script.js"></script>
 <script src="scripts/auth_popup.js"></script>
 <script src="scripts/themeChange.js"></script>
 <script src="scripts/clock.js"></script>
+<script src="scripts/tableSort.js"></script>
 </body>
 </html>
