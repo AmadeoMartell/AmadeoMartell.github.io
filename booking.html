@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Medeu SE-2324 — Room Booking | Book</title>
+    <style>
+        :root{
+            --bg1:#0b1020; --bg2:#0f1b3d; --muted:#94a3b8; --text:#e2e8f0;
+            --border: rgba(148,163,184,.18); --shadow: 0 18px 60px rgba(0,0,0,.35);
+            --radius:18px; --ring:0 0 0 4px rgba(96,165,250,.18);
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0; min-height:100vh; padding:28px;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            color:var(--text);
+            background: radial-gradient(1200px 600px at 20% -10%, rgba(96,165,250,.35), transparent 60%),
+            radial-gradient(800px 500px at 90% 10%, rgba(34,197,94,.22), transparent 55%),
+            linear-gradient(180deg, var(--bg1), var(--bg2));
+            display:flex; justify-content:center; align-items:flex-start;
+        }
+        .wrap{width:min(980px,100%); display:grid; grid-template-columns: 1fr .9fr; gap:16px;}
+        @media (max-width: 900px){ .wrap{grid-template-columns:1fr} }
+        .card{
+            background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(15,23,42,.78));
+            border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+            overflow:hidden;
+        }
+        .header{padding:18px 20px; border-bottom:1px solid var(--border); background: rgba(2,6,23,.35);}
+        .header h1{margin:0; font-size:22px}
+        .header p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.4}
+        .content{padding:20px}
+        .field{display:flex; flex-direction:column; gap:8px; margin-bottom:14px;}
+        label{font-size:13px; color:var(--muted)}
+        input, select, textarea{
+            border-radius:14px; border:1px solid var(--border);
+            background: rgba(2,6,23,.35); color:var(--text);
+            padding:10px 12px; outline:none;
+        }
+        textarea{min-height:90px; resize:vertical}
+        input:focus, select:focus, textarea:focus{box-shadow:var(--ring); border-color: rgba(96,165,250,.5)}
+        .row{display:flex; gap:12px; flex-wrap:wrap}
+        .btn{
+            height:44px; padding:0 14px; border-radius:14px; border:1px solid var(--border);
+            background: rgba(2,6,23,.35); color:var(--text); cursor:pointer; font-weight:800;
+        }
+        .btn-primary{background: linear-gradient(135deg, rgba(96,165,250,.95), rgba(59,130,246,.75)); border-color: rgba(96,165,250,.55);}
+        .btn-primary:hover{filter:brightness(1.05)}
+        .pill{display:inline-flex; gap:8px; align-items:center; font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background: rgba(2,6,23,.25); color:var(--muted);}
+        .side{padding:20px; display:flex; flex-direction:column; gap:12px}
+        .box{padding:14px; border-radius:16px; border:1px solid var(--border); background: rgba(2,6,23,.25)}
+        .box h3{margin:0; font-size:14px}
+        .box p{margin:6px 0 0; color:var(--muted); font-size:12px; line-height:1.45}
+    </style>
+
+    <script>
+        function guard() {
+            const ok = localStorage.getItem("rb_logged_in") === "true";
+            if (!ok) window.location.href = "login.html";
+            document.getElementById("userBadge").textContent = localStorage.getItem("rb_user") || "Guest";
+        }
+
+        function getQueryParam(name) {
+            const u = new URL(window.location.href);
+            return u.searchParams.get(name);
+        }
+
+        function init() {
+            guard();
+            const room = getQueryParam("room");
+            if (room) {
+                document.getElementById("room").value = room;
+                document.getElementById("selectedRoomPill").innerHTML = `Selected room: <strong>${room}</strong>`;
+            } else {
+                document.getElementById("selectedRoomPill").textContent = "Selected room: —";
+            }
+        }
+
+        function book() {
+            const room = document.getElementById("room").value;
+            const date = document.getElementById("date").value;
+            const start = document.getElementById("startTime").value;
+            const end = document.getElementById("endTime").value;
+            const purpose = document.getElementById("purpose").value.trim();
+
+            if (!room || !date || !start || !end || !purpose) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const user = localStorage.getItem("rb_user") || "Guest";
+            const params = new URLSearchParams({
+                room, date, start, end, purpose, user
+            });
+
+            window.location.href = "confirmation.html?" + params.toString();
+        }
+
+        window.addEventListener("DOMContentLoaded", init);
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="card">
+        <div class="header">
+            <h1 id="pageHeading">Book an auditorium</h1>
+            <p>Fill the form and submit. Selenium can verify the <code>&lt;title&gt;</code> checkpoint and confirmation.</p>
+        </div>
+
+        <div class="content">
+            <div class="pill" id="selectedRoomPill">Selected room: —</div>
+
+            <div class="field" style="margin-top:12px;">
+                <label for="room">Room</label>
+                <select id="room" name="room">
+                    <option value="">Select room</option>
+                    <option value="A-101">A-101 (Lecture)</option>
+                    <option value="A-204">A-204 (Lab)</option>
+                    <option value="B-12">B-12 (Meeting)</option>
+                    <option value="C-305">C-305 (Lecture)</option>
+                    <option value="D-07">D-07 (Lab)</option>
+                    <option value="E-110">E-110 (Meeting)</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="field" style="flex:1; min-width:220px;">
+                    <label for="date">Date</label>
+                    <input id="date" name="date" type="date" />
+                </div>
+                <div class="field" style="flex:1; min-width:220px;">
+                    <label for="startTime">Start time</label>
+                    <input id="startTime" name="startTime" type="time" />
+                </div>
+                <div class="field" style="flex:1; min-width:220px;">
+                    <label for="endTime">End time</label>
+                    <input id="endTime" name="endTime" type="time" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="purpose">Purpose / Notes</label>
+                <textarea id="purpose" name="purpose" placeholder="e.g. SE-2324 presentation rehearsal, lab work..."></textarea>
+            </div>
+
+            <div class="row" style="align-items:center;">
+                <button class="btn btn-primary" id="bookBtn" type="button" onclick="book()">Confirm booking</button>
+                <a class="btn" id="goSearchBtn" href="search.html" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Back to Search</a>
+                <span class="pill" id="userBadge">—</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="side">
+            <div class="box">
+                <h3>Title checkpoint</h3>
+                <p>
+                    Page title contains: <strong>Room Booking | Book</strong><br/>
+                    You can assert it in Selenium.
+                </p>
+            </div>
+            <div class="box">
+                <h3>Author info</h3>
+                <p>Project by <strong>Medeu</strong>, group <strong>SE-2324</strong>.</p>
+            </div>
+            <div class="box">
+                <h3>Stable locators</h3>
+                <p>
+                    Form ids: <code>#room</code>, <code>#date</code>, <code>#startTime</code>, <code>#endTime</code>, <code>#purpose</code>, <code>#bookBtn</code>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

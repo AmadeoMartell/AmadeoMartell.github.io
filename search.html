@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Medeu SE-2324 — Room Booking | Search</title>
+    <style>
+        :root{
+            --bg1:#0b1020; --bg2:#0f1b3d; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0;
+            --accent:#60a5fa; --accent2:#22c55e; --border: rgba(148,163,184,.18);
+            --shadow: 0 18px 60px rgba(0,0,0,.35); --radius:18px; --ring:0 0 0 4px rgba(96,165,250,.18);
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0; min-height:100vh; padding:28px;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            color:var(--text);
+            background: radial-gradient(1200px 600px at 20% -10%, rgba(96,165,250,.35), transparent 60%),
+            radial-gradient(800px 500px at 90% 10%, rgba(34,197,94,.22), transparent 55%),
+            linear-gradient(180deg, var(--bg1), var(--bg2));
+        }
+        .topbar{
+            width:min(980px,100%); margin:0 auto 14px;
+            display:flex; align-items:center; justify-content:space-between; gap:12px;
+        }
+        .brand{display:flex; align-items:center; gap:10px}
+        .logo{width:34px;height:34px;border-radius:14px;background:linear-gradient(135deg, rgba(96,165,250,.9), rgba(34,197,94,.75));}
+        .brand h1{margin:0; font-size:14px}
+        .brand p{margin:2px 0 0; color:var(--muted); font-size:12px}
+        .badge{font-size:12px; padding:8px 10px; border-radius:999px; border:1px solid var(--border); color:var(--muted); background: rgba(2,6,23,.25);}
+        .card{
+            width:min(980px,100%); margin:0 auto;
+            background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(15,23,42,.78));
+            border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+            overflow:hidden;
+        }
+        .header{padding:18px 20px; border-bottom:1px solid var(--border); background: rgba(2,6,23,.35);}
+        .header h2{margin:0; font-size:22px}
+        .header p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.4}
+        .content{padding:20px}
+        .controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px}
+        input, select{
+            height:44px; border-radius:14px; border:1px solid var(--border);
+            background: rgba(2,6,23,.35); color:var(--text); padding:0 12px; outline:none;
+        }
+        input:focus, select:focus{box-shadow:var(--ring); border-color: rgba(96,165,250,.5)}
+        .btn{
+            height:44px; padding:0 14px; border-radius:14px; border:1px solid var(--border);
+            background: rgba(2,6,23,.35); color:var(--text); cursor:pointer; font-weight:700;
+        }
+        .btn-primary{background: linear-gradient(135deg, rgba(96,165,250,.95), rgba(59,130,246,.75)); border-color: rgba(96,165,250,.55);}
+        .btn-primary:hover{filter:brightness(1.05)}
+        .btn-ghost{text-decoration:none; display:inline-flex; align-items:center; justify-content:center}
+        .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;}
+        @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
+        .room{
+            padding:14px; border-radius:16px; border:1px solid var(--border); background: rgba(2,6,23,.25);
+            display:flex; flex-direction:column; gap:8px;
+        }
+        .room h3{margin:0; font-size:16px}
+        .meta{color:var(--muted); font-size:12px; line-height:1.45}
+        .pill{
+            display:inline-flex; align-items:center; gap:6px;
+            font-size:12px; padding:6px 10px; border-radius:999px;
+            border:1px solid var(--border); background: rgba(2,6,23,.25); color:var(--muted);
+            width:max-content;
+        }
+        .footer{padding:14px 20px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+    </style>
+
+    <script>
+        const ROOMS = [
+            { id:"A-101", campus:"AITU", cap:30, type:"Lecture", equipment:["Projector","Whiteboard"] },
+            { id:"A-204", campus:"AITU", cap:18, type:"Lab", equipment:["PCs","Projector"] },
+            { id:"B-12",  campus:"AITU", cap:12, type:"Meeting", equipment:["TV","Whiteboard"] },
+            { id:"C-305", campus:"AITU", cap:40, type:"Lecture", equipment:["Projector","Audio"] },
+            { id:"D-07",  campus:"AITU", cap:20, type:"Lab", equipment:["PCs"] },
+            { id:"E-110", campus:"AITU", cap:10, type:"Meeting", equipment:["Whiteboard"] },
+        ];
+
+        function guard() {
+            const ok = localStorage.getItem("rb_logged_in") === "true";
+            if (!ok) window.location.href = "login.html";
+            document.getElementById("userBadge").textContent = localStorage.getItem("rb_user") || "Guest";
+        }
+
+        function render(list) {
+            const box = document.getElementById("resultsList");
+            box.innerHTML = "";
+            list.forEach(r => {
+                const el = document.createElement("div");
+                el.className = "room";
+                el.innerHTML = `
+          <div class="pill" data-room-pill="${r.id}">Room <strong>${r.id}</strong></div>
+          <h3 data-room-title="${r.id}">${r.type} • Capacity ${r.cap}</h3>
+          <div class="meta">Campus: ${r.campus}<br/>Equipment: ${r.equipment.join(", ")}</div>
+          <a class="btn btn-primary btn-ghost" id="bookLink-${r.id}" href="booking.html?room=${encodeURIComponent(r.id)}" style="margin-top:8px;">
+            Book this room
+          </a>
+        `;
+                box.appendChild(el);
+            });
+            document.getElementById("resultsCount").textContent = String(list.length);
+        }
+
+        function doSearch() {
+            const q = document.getElementById("searchInput").value.trim().toLowerCase();
+            const type = document.getElementById("typeFilter").value;
+            const minCap = parseInt(document.getElementById("minCap").value || "0", 10);
+
+            const filtered = ROOMS.filter(r => {
+                const matchesQ = !q || r.id.toLowerCase().includes(q) || r.equipment.join(" ").toLowerCase().includes(q);
+                const matchesType = (type === "Any") || (r.type === type);
+                const matchesCap = r.cap >= minCap;
+                return matchesQ && matchesType && matchesCap;
+            });
+
+            render(filtered);
+            document.getElementById("resultText").textContent =
+                filtered.length ? `Found ${filtered.length} rooms.` : "No rooms matched your search.";
+        }
+
+        function logout() {
+            localStorage.removeItem("rb_logged_in");
+            localStorage.removeItem("rb_user");
+            window.location.href = "login.html";
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            guard();
+            render(ROOMS);
+            document.getElementById("resultText").textContent = "Showing all rooms.";
+        });
+    </script>
+</head>
+
+<body>
+<div class="topbar">
+    <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+            <h1 id="appTitle">AITU Room Booking</h1>
+            <p>Medeu • SE-2324 • Search auditoriums</p>
+        </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div class="badge" id="userBadge">—</div>
+        <button class="btn" id="logoutBtn" onclick="logout()">Logout</button>
+        <a class="btn btn-ghost" id="goBookingBtn" href="booking.html" style="text-decoration:none;">Booking</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="header">
+        <h2>Search auditoriums</h2>
+        <p>Use keywords (room id / equipment), filter by type and minimum capacity.</p>
+    </div>
+
+    <div class="content">
+        <div class="controls">
+            <input id="searchInput" type="text" placeholder="Search: A-101, projector, PCs..." />
+            <select id="typeFilter">
+                <option>Any</option>
+                <option>Lecture</option>
+                <option>Lab</option>
+                <option>Meeting</option>
+            </select>
+            <input id="minCap" type="number" min="0" step="1" placeholder="Min capacity (e.g. 20)" />
+            <button class="btn btn-primary" id="searchBtn" onclick="doSearch()">Search</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+            <div id="resultText" style="color:var(--muted); font-size:13px;">—</div>
+            <div class="pill">Results: <strong id="resultsCount">0</strong></div>
+        </div>
+
+        <div class="grid" id="resultsList"></div>
+    </div>
+
+    <div class="footer">
+        <span>Tip: Selenium can assert #resultsCount after search.</span>
+        <span>Project by Medeu (SE-2324)</span>
+    </div>
+</div>
+</body>
+</html>
