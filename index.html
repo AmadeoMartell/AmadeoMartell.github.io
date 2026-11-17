@@ -1,28 +1,401 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Iframe test</title>
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-      }
-      iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <iframe
-      src="https://almasliq.github.io/iframe-test/"
-      title="Embedded site"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      allow="fullscreen"
-    ></iframe>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MasterPath Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F7DC1;--dark:#1D3557;--bg:#EEF5FB;--soft:#DCEBF7;--org:#F08A3C;--org-soft:#FDEBDD;--ink:#26323F;--grey:#5E6B78;--ok:#2E9E6A;--ok-soft:#DDF3E8;--bad:#D9534F;--line:#E3EAF2}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 'Open Sans',Arial,sans-serif}
+h1,h2,h3,.mont{font-family:Montserrat,Arial,sans-serif;margin:0;color:var(--dark)}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 16px;font-weight:600;transition:.15s}
+.btn{background:var(--blue);color:#fff}.btn:hover{filter:brightness(1.08)}
+.btn.org{background:var(--org)}.btn.ghost{background:var(--soft);color:var(--blue)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* header */
+.top{background:#fff;border-bottom:5px solid var(--blue);padding:14px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.top h1{font-size:30px;font-weight:800}
+.top .sub{color:var(--grey);font-size:14px}
+.top .sp{flex:1}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--grey)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+
+/* stepper */
+.flow{max-width:1180px;margin:18px auto 0;padding:0 16px;display:flex;align-items:flex-start}
+.st{flex:1;text-align:center;cursor:pointer;opacity:.55;transition:.2s}
+.st.on,.st.done{opacity:1}
+.st .ic{width:42px;height:42px;border-radius:50%;margin:0 auto 6px;background:var(--soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font:700 18px Montserrat}
+.st.hu .ic{background:var(--blue);color:#fff}.st.ai .ic{background:var(--org);color:#fff}
+.st.on .ic{transform:scale(1.15);box-shadow:0 0 0 6px rgba(47,125,193,.18)}
+.st.ai.on .ic{box-shadow:0 0 0 6px rgba(240,138,60,.22)}
+.st.done .ic:after{content:'✓';position:absolute;font-size:0}
+.st b{display:block;font:700 14px Montserrat;color:var(--dark)}
+.st span{font-size:12.5px;color:var(--grey)}
+.ar{flex:0 0 20px;color:var(--blue);padding-top:10px;text-align:center}
+
+/* app frame */
+.frame{max-width:1180px;margin:18px auto 30px;padding:0 16px}
+.win{background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(29,53,87,.12);overflow:hidden}
+.bar{background:var(--dark);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:13.5px}
+.dots i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ffffff40;margin-right:5px}
+.bar .who{margin-left:auto;background:#ffffff1f;padding:3px 10px;border-radius:20px}
+.scene{display:none;padding:22px;min-height:470px;animation:fade .35s}
+.scene.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.panel{border:1px solid var(--line);border-radius:14px;padding:16px}
+.panel h3{font-size:16px;margin-bottom:10px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--soft);color:var(--blue)}
+.tag.org{background:var(--org-soft);color:#B85F1C}.tag.ok{background:var(--ok-soft);color:var(--ok)}.tag.bad{background:#FBE3E2;color:var(--bad)}
+.muted{color:var(--grey);font-size:13.5px}
+.row{display:flex;align-items:center;gap:10px}
+.banner{background:var(--soft);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* items */
+.items{list-style:none;padding:0;margin:0}
+.items li{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid var(--line);border-radius:8px}
+.items li:last-child{border-bottom:0}
+.items .n{width:24px;height:24px;border-radius:50%;background:var(--soft);color:var(--blue);font:700 12px Montserrat;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.items .q{flex:1}
+.items .key{color:var(--org);font-weight:700}
+.items li.right{background:var(--ok-soft)}.items li.wrong{background:#FBE3E2}
+.tf button{padding:5px 12px;background:var(--soft);color:var(--blue);margin-left:4px}
+.tf button.sel{background:var(--blue);color:#fff}
+.draft{border:2px dashed var(--org);background:var(--org-soft)}
+.result{margin-top:14px;border-radius:12px;padding:14px 16px;display:none;align-items:center;gap:16px}
+.result.on{display:flex}
+.result .big{font:800 40px Montserrat}
+.result.no{background:#FFF4EC;border:1px solid #F7CBA8}.result.no .big{color:var(--org)}
+.result.yes{background:var(--ok-soft);border:1px solid #A9DCC3}.result.yes .big{color:var(--ok)}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:10px;height:360px;overflow:auto;padding:4px 4px 10px}
+.msg{max-width:78%;padding:10px 13px;border-radius:14px;animation:fade .3s}
+.msg.ai{background:var(--org-soft);border-top-left-radius:4px}
+.msg.me{background:var(--soft);align-self:flex-end;border-top-right-radius:4px}
+.msg small{display:block;font-weight:700;font-size:11.5px;color:var(--grey);margin-bottom:2px}
+.msg.block{border:1px solid var(--org)}
+.typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--org);margin-right:3px;animation:b 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{transform:translateY(-5px);opacity:.5}}
+.langs button{padding:4px 10px;background:var(--soft);color:var(--blue);font-size:13px}
+.langs button.sel{background:var(--org);color:#fff}
+table.tt{border-collapse:collapse;width:100%;text-align:center;font-weight:600}
+table.tt td,table.tt th{border:1px solid var(--line);padding:6px}
+table.tt th{background:var(--soft);color:var(--dark)}
+table.tt tr.hl td{background:var(--org-soft)}
+.meter{height:10px;border-radius:10px;background:var(--soft);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--org);transition:width .6s}
+.rules li{margin-bottom:6px}
+
+/* dashboard */
+.prog{margin-bottom:12px}.prog .row{justify-content:space-between;font-weight:600}
+.prog .meter i{background:var(--blue)}.prog.warn .meter i{background:var(--org)}
+.alert{background:#FFF4EC;border:1px solid #F7CBA8;border-radius:12px;padding:12px 14px}
+.stu{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.stu span{background:#fff;border:1px solid #F7CBA8;border-radius:20px;padding:2px 10px;font-size:12.5px}
+.unlock{font:800 20px Montserrat;color:var(--ok)}
+.pill{display:inline-block;background:var(--soft);color:var(--dark);border-radius:20px;padding:4px 11px;font-size:13px;margin:0 6px 6px 0}
+.illu{width:100%;max-height:140px;object-fit:contain;margin-top:10px}
+.note{text-align:center;color:var(--grey);font-size:12.5px;font-style:italic;margin-top:10px}
+
+/* tour */
+#veil{position:fixed;inset:0;z-index:50;pointer-events:none;display:none}
+#spot{position:fixed;z-index:51;border-radius:14px;box-shadow:0 0 0 9999px rgba(20,35,60,.55),0 0 0 4px var(--org);transition:all .35s ease;pointer-events:none}
+#tip{position:fixed;z-index:52;width:340px;background:#fff;border-radius:14px;padding:16px 18px 14px;box-shadow:0 12px 40px rgba(0,0,0,.25);transition:top .35s,left .35s;display:none}
+#tip:before{content:'';position:absolute;width:16px;height:16px;background:#fff;transform:rotate(45deg);left:var(--ax,40px)}
+#tip.below:before{top:-8px}#tip.above:before{bottom:-8px}#tip.center:before{display:none}
+#tip h4{margin:0 0 6px;font:700 16px Montserrat;color:var(--dark)}
+#tip p{margin:0 0 12px;font-size:14px}
+#tip .ctl{display:flex;align-items:center;gap:8px}
+#tip .cnt{font-size:12px;color:var(--grey);margin-right:auto}
+#tip .who{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.pulse{animation:pulse 1.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 9999px rgba(20,35,60,.55),0 0 0 9px rgba(240,138,60,.45)}}
+#start{position:fixed;inset:0;z-index:60;background:rgba(20,35,60,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+#start .card{background:#fff;border-radius:20px;padding:30px 34px;max-width:560px;text-align:center}
+#start img{height:150px}
+#start h2{font-size:34px;font-weight:800;margin:8px 0 4px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}.flow .st span{display:none}.top h1{font-size:24px}#tip{width:calc(100vw - 32px)}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div><h1>MasterPath</h1><div class="sub">Human–AI mastery-learning companion · interactive demo</div></div>
+  <div class="sp"></div>
+  <div class="legend"><span><i style="background:var(--blue)"></i>people</span><span><i style="background:var(--org)"></i>AI</span></div>
+  <button class="btn org" onclick="tourStart()">▶ Guided tour</button>
+</header>
+
+<nav class="flow" id="flow">
+  <div class="st hu" data-go="0"><div class="ic">1</div><b>Teacher sets the unit</b><span>outcome, items, criteria</span></div><div class="ar">›</div>
+  <div class="st" data-go="1"><div class="ic">2</div><b>Short check</b><span>6 items, no AI, not graded</span></div><div class="ar">›</div>
+  <div class="st ai" data-go="2"><div class="ic">3</div><b>AI tutor helps</b><span>hints, no answers</span></div><div class="ar">›</div>
+  <div class="st" data-go="3"><div class="ic">4</div><b>Second check</b><span>new items, no AI</span></div><div class="ar">›</div>
+  <div class="st hu" data-go="4"><div class="ic">5</div><b>Teacher or TA</b><span>helps those who are stuck</span></div>
+</nav>
+
+<main class="frame">
+<div class="win">
+  <div class="bar"><span class="dots"><i></i><i></i><i></i></span>Moodle · Discrete Mathematics · Unit 3 <span class="who" id="who">Teacher view</span></div>
+
+  <!-- 1 TEACHER SETUP -->
+  <section class="scene" data-who="Teacher view">
+    <div class="grid">
+      <div class="panel" id="t-unit">
+        <div class="row" style="justify-content:space-between"><h3>Unit 3 · Logic: implication p → q</h3><span class="tag">Prerequisites: Unit 1 ✓ Unit 2 ✓</span></div>
+        <p id="t-outcome" style="margin:4px 0 12px"><b>Outcome:</b> the student finds the truth value of p → q for any p and q, <u>including a false premise</u>.</p>
+        <h3>Check items <span class="muted">(★ = key item)</span></h3>
+        <ul class="items" id="t-items"></ul>
+        <ul class="items" style="margin-top:8px"><li class="draft" id="t-draft"><span class="n" style="background:var(--org);color:#fff">AI</span>
+          <span class="q"><b>AI-drafted variant</b> for the second check:<br>“If 0 &gt; 1, then 2 is prime”</span>
+          <button class="btn" id="approve" onclick="approve()">Approve</button></li></ul>
+      </div>
+      <div>
+        <div class="panel" id="t-criteria">
+          <h3>Pass criteria</h3>
+          <div class="mont" style="font-size:28px;font-weight:800;color:var(--blue)">≥ 5 / 6</div>
+          <div class="muted">including all key items ★ → next unit unlocks</div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+          <div class="muted">Not passed twice, or student asks → <b>flag to teacher / TA</b></div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h3>Who does what</h3>
+          <div class="muted">AI drafts variants → <b>teacher approves each</b>.<br>Scoring by Moodle with the teacher's key.<br>AI gives <b>no grades</b>.</div>
+          <img class="illu" src="img/checklist_7q37.svg" alt="">
+        </div>
+        <button class="btn" id="publish" style="width:100%;margin-top:14px" disabled onclick="go(1)">Publish unit to students →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 FIRST CHECK -->
+  <section class="scene" data-who="Student view">
+    <div class="banner" id="c1-banner"><span class="tag">Short check</span><span class="tag">6 items</span><span class="tag bad">AI off</span><span class="tag ok">Not counted in the grade</span><span class="muted">Is p → q True or False?</span></div>
+    <ul class="items" id="c1"></ul>
+    <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn ghost" onclick="demoFill(1)">Fill like a demo student</button><button class="btn" id="c1-sub" onclick="submit(1)">Submit</button></div>
+    <div class="result" id="r1"></div>
+  </section>
+
+  <!-- 3 AI TUTOR -->
+  <section class="scene" data-who="Student view · AI tutor">
+    <div class="grid">
+      <div class="panel" id="chat-panel">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><h3 style="margin:0">AI tutor <span class="tag org">Unit 3 only</span></h3>
+          <div class="langs" id="langs"><button data-l="kz">KZ</button><button data-l="ru">RU</button><button data-l="en" class="sel">EN</button></div></div>
+        <div class="chat" id="chat"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px"><button class="btn ghost" onclick="chatPlay()">Replay</button><button class="btn" onclick="go(3)">Try the second check →</button></div>
+      </div>
+      <div>
+        <div class="panel" id="hint-panel">
+          <h3>Scaffolding fades</h3>
+          <div class="row muted" style="justify-content:space-between"><span>Strong hint</span><span>Light hint</span></div>
+          <div class="meter"><i id="hint" style="width:100%"></i></div>
+          <div class="muted" id="hint-txt" style="margin-top:6px">Hint level 1 · analogy</div>
+          <table class="tt" style="margin-top:12px" id="tt"><tr><th>p</th><th>q</th><th>p → q</th></tr>
+            <tr><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td></tr>
+            <tr class="pf"><td>F</td><td>T</td><td>?</td></tr><tr class="pf"><td>F</td><td>F</td><td>?</td></tr></table>
+        </div>
+        <div class="panel" style="margin-top:14px" id="rules">
+          <h3>Tutor rules</h3>
+          <ul class="rules" style="padding-left:18px;margin:0;font-size:14px">
+            <li>✅ hints and similar examples</li><li>⛔ never gives check answers</li>
+            <li>🗣 Kazakh, Russian, English</li><li>👩‍🏫 teacher reads a sample of dialogues</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SECOND CHECK -->
+  <section class="scene" data-who="Student view">
+    <div class="banner"><span class="tag">Second check</span><span class="tag">New items</span><span class="tag bad">AI off</span><span class="muted">Is p → q True or False?</span></div>
+    <ul class="items" id="c2"></ul>
+    <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn ghost" onclick="demoFill(2)">Fill like a demo student</button><button class="btn" id="c2-sub" onclick="submit(2)">Submit</button></div>
+    <div class="result" id="r2"></div>
+  </section>
+
+  <!-- 5 TEACHER DASHBOARD -->
+  <section class="scene" data-who="Teacher view · dashboard">
+    <div class="grid">
+      <div class="panel" id="d-prog">
+        <h3>Stream CSE-25 · mastery by unit</h3>
+        <div class="prog"><div class="row"><span>Unit 1 · Sets</span><span>92%</span></div><div class="meter"><i data-w="92"></i></div></div>
+        <div class="prog"><div class="row"><span>Unit 2 · Propositions</span><span>84%</span></div><div class="meter"><i data-w="84"></i></div></div>
+        <div class="prog warn"><div class="row"><span>Unit 3 · Implication</span><span>61%</span></div><div class="meter"><i data-w="61"></i></div></div>
+        <div class="prog"><div class="row"><span>Unit 4 · Quantifiers</span><span>opens after Unit 3</span></div><div class="meter"><i data-w="8"></i></div></div>
+        <div class="alert" id="d-alert">
+          <b>⚑ 7 students need help on Unit 3</b> <span class="muted">— failed twice or asked</span>
+          <div class="stu"><span>Student 04</span><span>Student 11</span><span>Student 15</span><span>Student 22</span><span>Student 23</span><span>Student 31</span><span>Student 38</span></div>
+          <div class="muted" style="margin-top:8px">Common gap: <b>false premise (p = F)</b> → plan 10 min in Thursday's class</div>
+        </div>
+      </div>
+      <div>
+        <div class="panel" id="d-review">
+          <h3>Human checks on the AI</h3>
+          <div class="row" style="justify-content:space-between"><span>Dialogues to read (sample)</span><span class="tag org">5 new</span></div>
+          <div class="row" style="justify-content:space-between;margin-top:8px"><span>Disputed scores</span><span class="tag">2</span></div>
+          <div class="row" style="justify-content:space-between;margin-top:8px"><span>Reported AI errors</span><span><span class="tag">KZ 2</span> <span class="tag">RU 1</span> <span class="tag">EN 0</span></span></div>
+          <div class="row" style="justify-content:space-between;margin-top:8px"><span>Grades given by AI</span><span class="tag ok">0 — teacher only</span></div>
+        </div>
+        <div class="panel" style="margin-top:14px" id="d-basis">
+          <h3>Pedagogical basis</h3>
+          <span class="pill">Mastery learning · Bloom</span><span class="pill">Constructive alignment · Biggs</span><span class="pill">ZPD &amp; scaffolding · Vygotsky</span><span class="pill">Formative assessment · Black &amp; Wiliam</span><span class="pill">Cognitive load · Sweller</span>
+          <img class="illu" src="img/dashboard_nklg.svg" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="note" style="padding-bottom:12px">Mock-up with invented data and a scripted dialogue. No working AI has been built yet.</div>
+</div>
+</main>
+
+<div id="veil"><div id="spot"></div></div>
+<div id="tip"><div class="who" id="tip-who"></div><h4 id="tip-h"></h4><p id="tip-p"></p>
+  <div class="ctl"><span class="cnt" id="tip-c"></span><button class="btn ghost" onclick="tourEnd()">Exit</button><button class="btn ghost" id="tip-back" onclick="tourStep(-1)">‹</button><button class="btn" id="tip-next" onclick="tourStep(1)">Next ›</button></div></div>
+
+<div id="start"><div class="card">
+  <img src="img/book_lover_mkck.svg" alt="">
+  <h2>MasterPath</h2>
+  <p class="muted">A human–AI mastery-learning companion for first-year courses.<br>Group CSE-2605 · Pedagogy of Higher Education · AITU 2026</p>
+  <div class="row" style="justify-content:center;margin-top:16px"><button class="btn org" onclick="tourStart()">▶ Start guided tour</button><button class="btn ghost" onclick="document.getElementById('start').remove()">Explore freely</button></div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const imp=(p,q)=>!p||q;
+// items: [text, p, q, key]
+const C1=[["p = T, q = T",1,1,0],["p = T, q = F",1,0,1],["“If 2 + 2 = 4, then 3 is odd”",1,1,0],["p = F, q = T",0,1,1],["“If 7 is odd, then 7 is even”",1,0,0],["“If 3 > 5, then 1 + 1 = 3”",0,0,1]];
+const C2=[["p = F, q = F",0,0,1],["“If 10 is prime, then 4 is odd”",0,0,0],["p = T, q = F",1,0,1],["“If 9 is divisible by 3, then 9 is odd”",1,1,0],["p = F, q = T",0,1,1],["“If 5 is even, then 2 + 2 = 4”",0,1,0]];
+const DEMO1=[1,0,1,0,0,0]; // typical misconception: false premise -> False
+const ans={1:[],2:[]};
+
+$('#t-items').innerHTML=C1.map((c,i)=>`<li><span class="n">${i+1}</span><span class="q">${c[0]} ${c[3]?'<span class="key">★</span>':''}</span><span class="tag ok">approved</span></li>`).join('');
+function renderCheck(n){
+  const C=n==1?C1:C2;
+  $('#c'+n).innerHTML=C.map((c,i)=>`<li data-i="${i}"><span class="n">${i+1}</span><span class="q">${c[0]} ${c[3]?'<span class="key">★</span>':''}</span><span class="tf"><button data-v="1">True</button><button data-v="0">False</button></span></li>`).join('');
+  $$('#c'+n+' .tf button').forEach(b=>b.onclick=()=>{const li=b.closest('li');ans[n][li.dataset.i]=+b.dataset.v;li.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x==b))});
+}
+renderCheck(1);renderCheck(2);
+function demoFill(n){const C=n==1?C1:C2;C.forEach((c,i)=>{const v=n==1?DEMO1[i]:+imp(c[1],c[2]);ans[n][i]=v;$$(`#c${n} li`)[i].querySelectorAll('button').forEach(b=>b.classList.toggle('sel',+b.dataset.v==v))})}
+function submit(n){
+  const C=n==1?C1:C2;let s=0,keyOk=true,wrong=[];
+  C.forEach((c,i)=>{const ok=ans[n][i]===+imp(c[1],c[2]);const li=$$(`#c${n} li`)[i];li.classList.toggle('right',ok);li.classList.toggle('wrong',!ok);if(ok)s++;else{wrong.push(i+1);if(c[3])keyOk=false}});
+  const pass=s>=5&&keyOk,r=$('#r'+n);r.className='result on '+(pass?'yes':'no');
+  r.innerHTML=pass
+    ?`<div class="big">${s} / 6</div><div><span class="tag ok">Pass</span><div class="unlock">🔓 Unit 4 · Quantifiers unlocked</div><div class="muted">Mastery confirmed without AI. The grade itself is still given by the teacher.</div></div><button class="btn" style="margin-left:auto" onclick="go(4)">Teacher view →</button>`
+    :`<div class="big">${s} / 6</div><div><span class="tag org">Not yet</span><div><b>Review: false premise</b> (items ${wrong.join(', ')})</div><div class="muted">${n==1?'No penalty — this check is only feedback.':'Second try failed → teacher / TA gets a flag.'}</div></div><button class="btn org" style="margin-left:auto" onclick="go(${n==1?2:4})">${n==1?'Get help from the AI tutor →':'Teacher view →'}</button>`;
+}
+
+// chat script: [who, text, hintLevel]
+const CHAT={
+ en:[["ai","Items 4 and 6 are “not yet” — both have p = F. I won't give you the answers, but I'll help you find them.",1],
+     ["ai","Think of p → q as a promise: “If you pass the exam, I'll buy you coffee.” When is this promise broken?",1],
+     ["me","When I pass and you don't buy coffee?"],
+     ["ai","Exactly. Now: you did NOT pass. Whatever I do — did I break the promise?",2],
+     ["me","No… so it's True? Can you just tell me item 4?"],
+     ["ai","I can't give check answers 🙂 Here is a similar one: p = “5 is even” (F), q = “7 is odd” (T). What is p → q?",3,1],
+     ["me","True!"],
+     ["ai","Check yourself: look at both rows of the table where p = F. Ready for a second check with new items?",4]],
+ ru:[["ai","Задания 4 и 6 — «пока нет», в обоих p = F. Ответы я не скажу, но помогу их найти.",1],
+     ["ai","Представь p → q как обещание: «Если сдашь экзамен, куплю тебе кофе». Когда обещание нарушено?",1],
+     ["me","Когда я сдал, а ты кофе не купил?"],
+     ["ai","Именно. А теперь: ты НЕ сдал. Что бы я ни сделал — нарушил ли я обещание?",2],
+     ["me","Нет… значит, True? Можешь просто сказать ответ на 4?"],
+     ["ai","Ответы на проверку не даю 🙂 Вот похожий пример: p = «5 чётное» (F), q = «7 нечётное» (T). Чему равно p → q?",3,1],
+     ["me","True!"],
+     ["ai","Проверь себя: посмотри на обе строки таблицы, где p = F. Готов ко второй проверке с новыми заданиями?",4]],
+ kz:[["ai","4 және 6 тапсырмалар — «әзірге жоқ», екеуінде де p = F. Жауапты айтпаймын, бірақ оны табуға көмектесемін.",1],
+     ["ai","p → q-ны уәде ретінде елестет: «Емтиханнан өтсең, саған кофе аламын». Уәде қашан бұзылады?",1],
+     ["me","Мен өтсем, ал сен кофе алмасаң ба?"],
+     ["ai","Дәл солай. Енді: сен емтиханнан ӨТПЕДІҢ. Мен не істесем де — уәдені бұздым ба?",2],
+     ["me","Жоқ… онда True ма? 4-тапсырманың жауабын айтып жібересің бе?"],
+     ["ai","Тексеру жауаптарын бермеймін 🙂 Ұқсас мысал: p = «5 — жұп сан» (F), q = «7 — тақ сан» (T). p → q неге тең?",3,1],
+     ["me","True!"],
+     ["ai","Өзіңді тексер: кестеде p = F болатын екі жолды қара. Жаңа тапсырмалармен екінші тексеруге дайынсың ба?",4]]};
+const NAME={en:["AI tutor","Student"],ru:["ИИ-тьютор","Студент"],kz:["ЖИ-тьютор","Студент"]};
+const HINT=["","Hint level 1 · analogy","Hint level 2 · guiding question","Hint level 3 · similar example","Hint level 4 · self-check only"];
+let lang='en',timer=null,run=0;
+$$('#langs button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;$$('#langs button').forEach(x=>x.classList.toggle('sel',x==b));chatPlay(true)});
+function chatPlay(fast){
+  const my=++run,box=$('#chat');box.innerHTML='';clearTimeout(timer);let i=0;
+  $$('#tt tr.pf').forEach(r=>{r.classList.remove('hl');r.lastElementChild.textContent='?'});
+  const step=()=>{
+    if(my!==run||i>=CHAT[lang].length)return;
+    const [w,t,h,block]=CHAT[lang][i++];
+    const add=()=>{if(my!==run)return;box.querySelector('.typing')?.remove();
+      const d=document.createElement('div');d.className='msg '+w+(block?' block':'');d.innerHTML=`<small>${NAME[lang][w=='ai'?0:1]}</small>${t}`;box.appendChild(d);box.scrollTop=1e6;
+      if(h){$('#hint').style.width=(100-(h-1)*25)+'%';$('#hint-txt').textContent=HINT[h]}
+      if(h==4)$$('#tt tr.pf').forEach(r=>{r.classList.add('hl');r.lastElementChild.textContent='T'});
+      timer=setTimeout(step,fast?250:w=='me'?900:1400)};
+    if(w=='ai'&&!fast){box.insertAdjacentHTML('beforeend','<div class="msg ai typing"><span></span><span></span><span></span></div>');box.scrollTop=1e6;timer=setTimeout(add,900)}else add();
+  };step();
+}
+
+// navigation
+let cur=-1;
+function go(n){
+  if(n===cur)return;cur=n;
+  $$('.scene').forEach((s,i)=>s.classList.toggle('on',i==n));
+  $$('.st').forEach((s,i)=>{s.classList.toggle('on',i==n);s.classList.toggle('done',i<n)});
+  $('#who').textContent=$$('.scene')[n].dataset.who;
+  if(n==2)chatPlay();
+  if(n==4)setTimeout(()=>$$('#d-prog .meter i').forEach(m=>m.style.width=m.dataset.w+'%'),100);else $$('#d-prog .meter i').forEach(m=>m.style.width=0);
+}
+$$('.st').forEach(s=>s.onclick=()=>go(+s.dataset.go));
+function approve(){$('#approve').outerHTML='<span class="tag ok">approved by teacher</span>';$('#t-draft').classList.remove('draft');$('#publish').disabled=false}
+go(0);
+
+// guided tour: [scene, target, who, title, text, onEnter]
+const T=[
+ [0,null,"","Why MasterPath?","In cumulative first-year courses a topic missed in week 2 breaks later topics, and in large streams a teacher can't give feedback to everyone. Let's walk one student through one unit."],
+ [0,"#flow","How it works","Five steps, two roles","Blue steps are done by people, the orange step by AI. The student moves on only after showing mastery."],
+ [0,"#t-outcome","Teacher","1 · The teacher sets the outcome","One small, measurable outcome per unit (constructive alignment: outcome, practice and check test the same thing)."],
+ [0,"#t-criteria","Teacher","Clear pass criteria","At least 5 of 6, including the key items. Same bar for everyone — weaker preparation means more time and help, not a lower grade."],
+ [0,"#t-draft","AI → Teacher","AI drafts, the teacher decides","The AI only proposes item variants. Nothing reaches students until the teacher approves it.",()=>setTimeout(approve,900)],
+ [1,"#c1-banner","Student","2 · Short check — without AI","6 items, AI switched off, not counted in the grade. It's formative feedback, not a test.",()=>demoFill(1)],
+ [1,"#c1","Student","A typical mistake","Our demo student thinks “false premise → False”. Watch what happens on submit.",()=>submit(1)],
+ [1,"#r1","Student","“Not yet”, not “failed”","4 / 6 and key items missed. The system names the exact gap — false premise — and offers help."],
+ [2,"#chat-panel","AI tutor","3 · The AI tutor gives hints, not answers","An analogy, a guiding question, a similar example. When the student asks for the answer, the tutor refuses (Bastani et al., 2025: unguided AI lowered later results by 17%)."],
+ [2,"#langs","AI tutor","Kazakh, Russian, English","The student can ask in any of the three languages — try switching. Help can be asked privately."],
+ [2,"#hint-panel","AI tutor","Scaffolding fades","Hints get lighter as the student improves (Vygotsky's ZPD). The last step is a self-check, not an answer."],
+ [3,"#c2","Student","4 · Second check — new items, no AI","Different items test the same outcome, so the student can't just memorize.",()=>demoFill(2)],
+ [3,"#r2","Student","Mastery → next unit","6 / 6 including key items: Unit 4 unlocks. If the student failed twice, the teacher would get a flag.",()=>submit(2)],
+ [4,"#d-alert","Teacher / TA","5 · People help the stuck ones","The teacher sees who needs help and the common gap — and plans class time for it."],
+ [4,"#d-review","Teacher","Humans stay in control","The teacher reads a sample of AI dialogues, reviews disputes, tracks AI errors by language. All grades come from the teacher."],
+ [4,"#d-basis","Pedagogy","Built on research","Mastery learning, constructive alignment, scaffolding, formative assessment, cognitive load. Next: survey, no-AI version, then a one-trimester pilot."],
+ [4,null,"","Thank you!","Group CSE-2605 · MasterPath. Feel free to click through the demo yourself."]];
+let ti=0;
+function tourStart(){$('#start')?.remove();ti=0;$('#veil').style.display='block';$('#tip').style.display='block';show()}
+function tourEnd(){$('#veil').style.display='none';$('#tip').style.display='none'}
+function tourStep(d){ti+=d;if(ti>=T.length)return tourEnd();if(ti<0)ti=0;show()}
+function show(){
+  const [sc,sel,who,h,p,fn]=T[ti];go(sc);
+  $('#tip-who').textContent=who;$('#tip-who').style.color=/AI/.test(who)?'var(--org)':'var(--blue)';
+  $('#tip-h').textContent=h;$('#tip-p').textContent=p;$('#tip-c').textContent=(ti+1)+' / '+T.length;
+  $('#tip-back').disabled=ti==0;$('#tip-next').textContent=ti==T.length-1?'Finish':'Next ›';
+  if(fn)fn();
+  const el=sel&&$(sel);if(el)el.scrollIntoView({block:'center',behavior:'smooth'});
+  setTimeout(place,el?420:0);
+}
+function place(){
+  if($('#tip').style.display!='block')return;
+  const sel=T[ti][1],el=sel&&$(sel),spot=$('#spot'),tip=$('#tip'),pad=8;
+  if(!el){spot.style.cssText='left:50%;top:50%;width:0;height:0';spot.classList.remove('pulse');tip.className='center';
+    tip.style.left=(innerWidth-tip.offsetWidth)/2+'px';tip.style.top=(innerHeight-tip.offsetHeight)/2+'px';return}
+  const r=el.getBoundingClientRect();
+  Object.assign(spot.style,{left:r.left-pad+'px',top:r.top-pad+'px',width:r.width+2*pad+'px',height:r.height+2*pad+'px'});spot.classList.add('pulse');
+  const tw=tip.offsetWidth,th=tip.offsetHeight,below=r.bottom+pad+16+th<innerHeight||r.top<th+40;
+  let left=Math.min(Math.max(16,r.left+r.width/2-tw/2),innerWidth-tw-16);
+  let top=below?Math.min(r.bottom+pad+16,innerHeight-th-8):r.top-pad-16-th;
+  tip.className=below?'below':'above';tip.style.left=left+'px';tip.style.top=top+'px';
+  tip.style.setProperty('--ax',Math.min(Math.max(16,r.left+r.width/2-left-8),tw-32)+'px');
+}
+addEventListener('resize',place);addEventListener('scroll',()=>requestAnimationFrame(place));
+addEventListener('keydown',e=>{if($('#tip').style.display!='block')return;if(e.key=='ArrowRight'||e.key==' '){e.preventDefault();tourStep(1)}if(e.key=='ArrowLeft')tourStep(-1);if(e.key=='Escape')tourEnd()});
+</script>
+</body>
 </html>
